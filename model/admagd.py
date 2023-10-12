@@ -77,6 +77,11 @@ class ADMAGD(AuthorTopicModel):
                     author = self.get_author(doc_id)
                     self.decrement_counts(doc_id, word_pos, current_topic, author)
                     topic_probs = self.calculate_topic_probabilities(doc_id, word_id, author)
+                    if any(val < 0 for val in topic_probs):
+                        print("Negative probabilities detected:", topic_probs)
+        #Handle or fix the negative probabilities here
+
+                    topic_probs = topic_probs / sum(topic_probs)
                     new_topic = np.random.choice(self.num_topics, p=topic_probs)
                     self.topic_assignments[doc_id][word_pos] = new_topic
                     self.word_topic_matrix[new_topic][word_id] += 1
