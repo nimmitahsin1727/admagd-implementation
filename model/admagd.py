@@ -1,5 +1,6 @@
 import numpy as np
 from gensim.models import AuthorTopicModel
+import time
 
 
 class AuthorTopicModel:
@@ -119,6 +120,9 @@ class ADMAGD(AuthorTopicModel):
     def gibbs_sampling(self, iterations=10):
         for iteration in range(iterations):
             print(f"iteration: {iteration+1}")
+
+            # Record the current time
+            start_time = time.time()
             for doc_id, document in enumerate(self.corpus):
                 author = self.get_author(doc_id)
 
@@ -145,6 +149,13 @@ class ADMAGD(AuthorTopicModel):
                     self.word_topic_matrix[new_topic, word_id] += 1
                     self.topic_counts[new_topic] += 1
                     self.author_topic_matrix[author_idx, new_topic] += 1
+
+            # Record the current time after the iteration has completed
+            end_time = time.time()
+
+            # Calculate the elapsed time
+            elapsed_time = end_time - start_time
+            print(f"Time : {elapsed_time:.4f} seconds \n")
 
     # def gibbs_sampling(self, iterations=10):
     #     for iteration in range(iterations):
